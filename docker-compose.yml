@@ -1,0 +1,14 @@
+services:
+  backend:
+    image: "${DOCKER_IMAGE_BACKEND}:${TAG:-latest}"
+    restart: always
+    build:
+      context: ./backend
+    env_file:
+      - .env
+      - ./backend/.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check"]
+      interval: 20s
+      timeout: 5s
+      retries: 5

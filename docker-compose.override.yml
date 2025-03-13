@@ -1,0 +1,17 @@
+services:
+  backend:
+    restart: no
+    build:
+      context: ./backend
+    command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+    develop:
+      watch:
+        - path: ./backend
+          action: sync
+          target: /app
+          ignore:
+            - .venv
+        - path: ./backend/pyproject.toml
+          action: rebuild
+    ports:
+      - "8000:8000"
