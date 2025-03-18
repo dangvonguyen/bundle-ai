@@ -2,6 +2,8 @@ FROM python:3.12-slim AS base
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y curl
+
 RUN groupadd -r app && useradd -r -g app app
 
 FROM base AS builder
