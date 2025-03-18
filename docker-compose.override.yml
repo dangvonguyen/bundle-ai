@@ -15,3 +15,8 @@ services:
           action: rebuild
     ports:
       - "8000:8000"
+
+  frontend:
+    restart: no
+    build:
+      context: ./frontend

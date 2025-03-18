@@ -12,3 +12,16 @@ services:
       interval: 20s
       timeout: 5s
       retries: 5
+
+  frontend:
+    image: "${DOCKER_IMAGE_FRONTEND}:${TAG:-latest}"
+    restart: always
+    build:
+      context: ./frontend
+    env_file:
+      - .env
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
