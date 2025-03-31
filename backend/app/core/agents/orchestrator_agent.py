@@ -1,7 +1,6 @@
 from typing import Any, Literal, cast
 
 from langchain_core.messages import AIMessage, BaseMessage, SystemMessage
-from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, state
 from pydantic import BaseModel, Field
 
@@ -54,14 +53,6 @@ class OrchestratorAgent(BaseAgent):
         )
         self.managed_agents = {agent.name: agent for agent in managed_agents}
         self._graph = self._create_graph()
-
-    async def run(self, inputs: dict[str, Any]) -> list[BaseMessage]:
-        """
-        Execute the agent with the given input.
-        """
-        config: RunnableConfig = {"configurable": {"thread_id": self.thread_id}}
-        response = await self._graph.ainvoke(inputs, config)
-        return response["messages"]  # type: ignore
 
     def _create_graph(self) -> state.CompiledStateGraph:
         async def analyze_request(
@@ -133,7 +124,7 @@ class OrchestratorAgent(BaseAgent):
             inputs = {"messages": [state.messages[-1].content]}
             responses = await agent.run(inputs)
 
-            return {"messages": responses[message_length:]}
+            return {"messages": responses["messages"][message_length:]}
 
         # Build the workflow graph
         workflow = StateGraph(OrchestratorState)

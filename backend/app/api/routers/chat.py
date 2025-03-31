@@ -30,7 +30,7 @@ async def respond(request: ChatRequest) -> Any:
 
     try:
         response = await agent.run({"messages": [request.message]})
-        assistant_message = str(response[-1].content)
+        assistant_message = str(response["messages"][-1].content)
         messages.append(Message(role="assistant", content=assistant_message))
         return ChatResponse(chat_id=chat_id, response=assistant_message)
     except Exception as e:

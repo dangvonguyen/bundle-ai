@@ -1,7 +1,6 @@
 from typing import Any, Literal, Optional, cast
 
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
-from langchain_core.runnables import RunnableConfig
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, state
 from langgraph.prebuilt import ToolNode
 from pydantic import BaseModel, Field
@@ -58,14 +57,6 @@ class PlanningAgent(BaseAgent):
         self.tools = tools or []
         self.model_with_tools = self.model.bind_tools(self.tools)
         self._graph = self._create_graph()
-
-    async def run(self, inputs: dict[str, Any]) -> list[BaseMessage]:
-        """
-        Execute the agent with the given input.
-        """
-        config: RunnableConfig = {"configurable": {"thread_id": self.thread_id}}
-        response = await self._graph.ainvoke(inputs, config)
-        return response["messages"]  # type: ignore
 
     def _create_graph(self) -> state.CompiledStateGraph:
         async def create_plan(state: PlanState) -> dict[str, Any]:
