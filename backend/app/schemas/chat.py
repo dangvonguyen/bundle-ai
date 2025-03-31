@@ -8,18 +8,18 @@ class Message(BaseModel):
     content: str = Field(description="The content of the message")
 
 
-class Conversation(BaseModel):
-    id: str = Field(description="Unique conversation identifier")
+class Chat(BaseModel):
+    id: str = Field(description="Unique chat identifier")
     messages: list[Message] = Field(
-        default_factory=list, description="List of messages in the conversation"
+        default_factory=list, description="List of messages in the chat"
     )
 
 
 class ChatRequest(BaseModel):
-    conversation_id: Optional[str] = Field(None, description="Existing conversation ID")
+    chat_id: Optional[str] = Field(None, description="Existing chat ID")
     message: str = Field(description="User message")
 
 
 class ChatResponse(BaseModel):
-    conversation_id: str = Field(description="Conversation ID")
+    chat_id: str = Field(description="Chat ID")
     response: str = Field(description="Assistant response")
